@@ -3,12 +3,16 @@
 #include "uart.h"
 #include "adc.h"
 #include "interrupt.h"
+#include "gpio.h"
+#include "led.h"
+
 #define USEC_TO_SEC 		1000000
 #define CONV_FACTOR            0.00244140625
-#define PULSE_THRESHOLD  70; // threshold value for pulse
-#define PULSE_INIT   60;     // initial value for pulse
-#define TEMP_THRESHOLD 7;   // threshold value for pulse(0-10)
-#define TEMP_INIT  60;       // initial value for temperature
+#define PULSE_THRESHOLD  70 // threshold value for pulse
+#define PULSE_INIT   60     // initial value for pulse
+#define TEMP_THRESHOLD 7   // threshold value for pulse(0-10)
+#define TEMP_INIT  60       // initial value for temperature
+
 void main() 
 {
 	UI adc_data, temp_data = 0;
@@ -39,7 +43,7 @@ void main()
   	  printf("\rPulse rate is %d", rate);
 	  counter++;
 	  temp_average=(temp_data+temp_average)/counter;
-	  pulse_average=(pulse_data+pulse_average)/counter;
+	  pulse_average=(rate+pulse_average)/counter;
 
 	  if (temp_average>TEMP_THRESHOLD){
 	    // set temp alert;
