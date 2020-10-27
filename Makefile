@@ -34,7 +34,7 @@ SDK_PATH=${VEGA_SDK}
 #+++++++++++++++++++++++
 # Executable name
 #+++++++++++++++++++++++
-EXECUTABLE_NAME=hello
+EXECUTABLE_NAME=pulse
 
 
 include $(SDK_PATH)/bsp/common/config.mk
