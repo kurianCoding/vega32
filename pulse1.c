@@ -10,7 +10,9 @@
 #define CONV_FACTOR            0.00244140625
 #define PULSE_THRESHOLD  70 // threshold value for pulse
 #define PULSE_INIT   60     // initial value for pulse
-#define TEMP_THRESHOLD 7   // threshold value for pulse(0-10)
+#define TEMP_THRESHOLD_1 4  // threshold value for pulse(0-10)
+#define TEMP_THRESHOLD_2 8  // threshold value for pulse(0-10)
+#define TEMP_THRESHOLD_3 12 // threshold value for pulse(0-10)
 #define TEMP_INIT  60       // initial value for temperature
 
 void main() 
@@ -44,12 +46,25 @@ void main()
 	  counter++;
 	  temp_average=(temp_data+temp_average)/counter;
 	  pulse_average=(rate+pulse_average)/counter;
-	  if (temp_average>TEMP_THRESHOLD){
-	    // set temp alert;
-	     on_LED(PIN_16);
+	  if (temp_average>TEMP_THRESHOLD_3){
+	    // set temp alert red;
+	     on_LED(PIN_19);
 	   }else{
-	     off_LED(PIN_16);
+	     off_LED(PIN_19);
 	   }
+	  if (temp_average<TEMP_THRESHOLD_3 && temp_average>TEMP_THRESHOLD_2){
+	    // set temp alert blue;
+	     on_LED(PIN_21);
+	   }else{
+	     off_LED(PIN_21);
+	   }
+	  if (temp_average<TEMP_THRESHOLD_2 && temp_average>TEMP_THRESHOLD_1){
+	    // set temp alert green;
+	     on_LED(PIN_20);
+	   }else{
+	     off_LED(PIN_20);
+	   }
+
 	  if (pulse_average>PULSE_THRESHOLD){
 	    // set pulse alert;
 	      on_LED(PIN_17);
