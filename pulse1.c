@@ -36,15 +36,14 @@ void main()
 	else
 	{ 
 
-	  rate = pulsecount/60; 
+	  rate = pulsecount; 
           startTime = read_csr(mcycle);
 	  endTime  =  read_csr(mcycle);
 	  pulsecount =0;
-  	  printf("\rPulse rate is %d", rate);
+  	  printf("\r Pulse rate %d temp %f",rate, temp_data);
 	  counter++;
 	  temp_average=(temp_data+temp_average)/counter;
 	  pulse_average=(rate+pulse_average)/counter;
-
 	  if (temp_average>TEMP_THRESHOLD){
 	    // set temp alert;
 	     on_LED(PIN_16);
@@ -65,7 +64,7 @@ void main()
        temp_data= adc_analogRead(A1);
        adc_out  = adc_data*CONV_FACTOR;
        temp_out = temp_data*CONV_FACTOR;
-       printf("\rtemp %x",temp_data);
+       printf("\r adc out %x coverted %f pulse count %d temp %f",adc_data, adc_out,pulsecount,temp_out);
        if(adc_out > 9.1)
        pulsecount++; 
        } 
