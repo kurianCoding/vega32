@@ -14,7 +14,7 @@
 #define TEMP_THRESHOLD_2 8  // threshold value for pulse(0-10)
 #define TEMP_THRESHOLD_3 12 // threshold value for pulse(0-10)
 #define TEMP_INIT  60       // initial value for temperature
-
+#define MAX_VALUE 1000000   // mod to prevent buffer overflow
 void main() 
 {
 	UI adc_data, temp_data = 0;
@@ -43,9 +43,9 @@ void main()
 	  endTime  =  read_csr(mcycle);
 	  pulsecount =0;
   	  printf("\r Pulse rate %d temp %f",rate, temp_data);
-	  counter++;
-	  temp_average=(temp_data+temp_average)/counter;
-	  pulse_average=(rate+pulse_average)/counter;
+	  counter=(counter+1)%MAX_VALUE;
+	  temp_average=((temp_data+temp_average*counter)/counter)%MAX_VALUE;
+	  pulse_average=((rate+pulse_average*counter)/counter)%MAX_VALUE;
 	  if (temp_average>TEMP_THRESHOLD_3){
 	    // set temp alert red;
 	     on_LED(PIN_19);
