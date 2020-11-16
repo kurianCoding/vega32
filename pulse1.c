@@ -13,9 +13,9 @@
 #define CONV_FACTOR            0.00244140625
 #define PULSE_THRESHOLD  70 // threshold value for pulse
 #define PULSE_INIT   60     // initial value for pulse
-#define MQ_THRESHOLD_1 4  // threshold 1 for MQ sensor
-#define MQ_THRESHOLD_2 8  // threshold 2 for MQ sensor
-#define MQ_THRESHOLD_3 12 // threshold 3 for MQ sensor
+#define MQ_THRESHOLD_1 1.5  // threshold 1 for MQ sensor
+#define MQ_THRESHOLD_2 1.7  // threshold 2 for MQ sensor
+#define MQ_THRESHOLD_3  1.7// threshold 3 for MQ sensor
 #define MQ_INIT  1       // initial value for MQerature
 #define H_THRESHOLD 3.0
 #define T_THRESHOLD 2.5
@@ -49,29 +49,28 @@ void main()
 	  endTime  =  read_csr(mcycle);
 	  pulsecount =0;
   	  printf("\r Pulse rate %d MQ %f",rate, MQ_data);
-	  counter=(counter+1)%MAX_VALUE;
-	  MQ_average=((MQ_data+MQ_average*counter)/(counter+1))%MAX_VALUE;
-	  pulse_average=((rate+pulse_average*counter)/(counter+1))%MAX_VALUE;
-	  if (MQ_average>MQ_THRESHOLD_3){
-	    // set MQ alert red;
-	     on_LED(PIN_19);
-	   }else{
-	     off_LED(PIN_19);
-	   }
-	  if (MQ_average<MQ_THRESHOLD_3 && MQ_average>MQ_THRESHOLD_2){
-	    // set MQ alert blue;
-	     on_LED(PIN_21);
-	   }else{
-	     off_LED(PIN_21);
-	   }
-	  if (MQ_average<MQ_THRESHOLD_2 && MQ_average>MQ_THRESHOLD_1){
+
+//	  pulse_average=((rate+pulse_average*counter)/(counter+1))%MAX_VALUE;
+	  if (MQ_out>MQ_THRESHOLD_3){
 	    // set MQ alert green;
 	     on_LED(PIN_20);
 	   }else{
 	     off_LED(PIN_20);
 	   }
+	  if (MQ_out<MQ_THRESHOLD_2 && MQ_out>MQ_THRESHOLD_1){
+	    // set MQ alert blue;
+	     on_LED(PIN_21);
+	   }else{
+	     off_LED(PIN_21);
+	   }
+	  if (MQ_out<MQ_THRESHOLD_1){
+	    // set MQ alert red;
+	     on_LED(PIN_19);
+	   }else{
+	     off_LED(PIN_19);
+	   }
 
-	  if (pulse_average>PULSE_THRESHOLD){
+	  if (rate>PULSE_THRESHOLD){
 	    // set pulse alert;
 	      on_LED(PIN_17);
 	  }else{
@@ -99,12 +98,13 @@ void main()
        hout_data = adc_analogRead(A2);
        tout_data = adc_analogRead(A3);
        adc_out  = adc_data*CONV_FACTOR;
-       MQ_out = MQ_data*CONV_FACTOR;
+       MQ_out = MQ_average*CONV_FACTOR;
        hout = hout_data * CONV_FACTOR;
        tout = tout_data*CONV_FACTOR;
-       
-       printf("\r conv %f pulse %d MQ %f hout %f tout %f tavg %d count %d", adc_out,pulsecount,MQ_out, hout, tout, MQ_average, counter);
-       if(adc_out > 9.1)
+ 	  counter=(counter+1)%MAX_VALUE;
+	  MQ_average=((MQ_data+MQ_average*counter)/(counter+1))%MAX_VALUE;      
+       printf("\r cnv %f MQ %f hout %f tout %f tavg %d cnt %d ", adc_out,MQ_out, hout, tout, MQ_average, counter);
+       if(adc_out > 2.192)
        pulsecount++; 
        } 
     
