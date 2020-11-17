@@ -1,7 +1,7 @@
 started
 
 ## TODO:done
-    - first hello world - done Friday at 3pm
+    - first hello world
     - integrate pulse sensor
     - find output formats of humidity and temperature sensor
     - integrate temperature sensor
